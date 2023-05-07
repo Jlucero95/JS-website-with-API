@@ -1,29 +1,21 @@
-.cardSelection {
-  max-width: 1345px;
-  margin: auto;
-}
+.cardSelection {max-width: 1345px;}
 
 .mainSelection, .favoritesSelection {
   font-size: 35px;
 }
 
 .cardHeader {
-  display: flex;
   max-width: 750px;
   margin: 25px auto;
   text-align: center;
-  flex-wrap: wrap;
   justify-content: space-between;
 }
 
 .counters {
-  display: flex;
   justify-content: space-evenly;
   align-content: center;
-  flex-wrap: wrap;
   width: 700px;
   height: 45px;
-  margin: auto;
 }
 
 .typeName {
@@ -35,10 +27,8 @@
 }
 
 .cardWrapper {
-  width: 700px;
+  width: 900px;
   margin: 10px auto;
-  display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
 }
 

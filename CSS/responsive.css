@@ -1,3 +1,9 @@
+@media screen and (max-width: 970px) {
+  .cardWrapper {
+    width: 600px;
+  }
+}
+
 @media screen and (max-width: 795px) {
   .cardHeader {
     max-width: 450px;
@@ -16,11 +22,6 @@
   } 
 }
 
-@media screen and (max-width: 740px) {
-  .cardWrapper {
-    width: 600px;
-  }
-}
 @media screen and (max-width: 640px) {
   .cardWrapper {
     width: 350px;
