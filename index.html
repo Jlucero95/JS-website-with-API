@@ -6,37 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JS Website with API</title>
   <link rel="stylesheet" href="./CSS/styles.css">
-  <link rel="stylesheet" href="./CSS/responsive.css">
+  <link rel="stylesheet" href="./CSS/theme.css">
+  <link rel="stylesheet" href="./CSS/base.css">
 </head>
 <body>
   <main>
-
-    <div class="cardSelection">
-      <div class="cardHeader">
-        <h2 class="mainSelection">Card Selection</h2>
-        <div class="sort">
-          <p>Sort Cards:</p>
-          <button class="sortBtn-main" type="button" data-sortdir="asc">A-Z</button>
-          <button class="sortBtn-main" type="button" data-sortdir="desc">Z-A</button>
-        </div>
-      </div>
-      <div id="count" class="counters"></div>
-      <div id="allCards" class="allCards cardWrapper"></div>
-    </div>
-
-    <div class="cardSelection">
-      <div class="cardHeader">
-        <h2 class="favoritesSelection">Favorites</h2>
-        <div class="sort">
-          <p>Sort Cards:</p>
-          <button class="sortBtn-favs" type="button" data-sortdir="asc">A-Z</button>
-          <button class="sortBtn-favs" type="button" data-sortdir="desc">Z-A</button>
-        </div>
-      </div>
-      <div id="favCards" class="favCards cardWrapper"></div>
-    </div>
-
+    <div id="allCards" class="allCards"></div>
   </main>
+  
+  
   <script src="main.js"></script>
 </body>
 </html>
