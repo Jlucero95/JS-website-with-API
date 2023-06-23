@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JS Website with API</title>
+  <title>API Refactor</title>
   <link rel="stylesheet" href="./CSS/styles.css">
   <link rel="stylesheet" href="./CSS/responsive.css">
 </head>
 <body>
   <main>
-
+    <div id="count" class="counters"></div>
     <div class="cardSelection">
       <div class="cardHeader">
         <h2 class="mainSelection">Card Selection</h2>
@@ -20,8 +20,8 @@
           <button class="sortBtn-main" type="button" data-sortdir="desc">Z-A</button>
         </div>
       </div>
-      <div id="count" class="counters"></div>
-      <div id="allCards" class="allCards cardWrapper"></div>
+      
+      <div id="mainCards" class="mainCards cardWrapper"></div>
     </div>
 
     <div class="cardSelection">

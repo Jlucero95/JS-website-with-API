@@ -42,7 +42,7 @@
 
 .card {
   width: 255px;
-  height: 482px;
+  height: 385px;
   border: 10px solid black;
   background-color: #914103;
   border-radius: 12px;
@@ -54,6 +54,7 @@
   width: 174px;
   height: 176px;
   margin: 15px auto;
+  box-shadow: 10px 10px 10px;
 }
 
 .card .pic{

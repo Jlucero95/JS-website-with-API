@@ -1,120 +1,115 @@
 // API
-const dataOfCards =
+const cardApi =
 	"https://db.ygoprodeck.com/api/v7/cardinfo.php?cardset=metal%20raiders&attribute=dark";
 
-let allData = [];
-const mainContainer = document.getElementById("allCards");
-
+const mainContainer = document.getElementById("mainCards");
 const favContainer = document.getElementById("favCards");
-// Move Cards
 
+// Store relevant Data
+let allCardInfo = [];
+
+const findData = (card) => {
+	allCardInfo.push(...card);
+};
+
+// Move Cards
 const moveCard = (cardId, direction) => {
 	const card = document.getElementById(cardId);
+	card.parentNode.removeChild(card);
 
 	if (direction === "toMain") {
-		card.parentNode.removeChild(card);
 		favContainer.appendChild(card);
 	} else if (direction === "toFavs") {
-		card.parentNode.removeChild(card);
 		mainContainer.appendChild(card);
 	}
 };
 
-// Create Type Counter
-const counters = document.getElementById("count");
-
-const typeData = [];
-
-const makeCounters = (type, number) => {
-	const counter = `<div class="counter ${type}">
-										<p class="typeName"><strong>${type}: ${number}</strong></p>
-									</div>`;
-	counters.insertAdjacentHTML("beforeend", counter);
-};
-
-let normal = 0;
-let effect = 0;
-let flipEffect = 0;
-let fusion = 0;
-
-const countTypes = (arr, val) => {
-	return arr.filter((v) => v === val).length;
-};
-
-const monsterTypes = [
-	"Normal Monster",
-	"Effect Monster",
-	"Flip Effect Monster",
-	"Fusion Monster",
-];
-
-// Create Cards
-const makeCard = (id, name, img, type, desc, atk, def) => {
-	const card = `<div id="${id}" class="card">
-										<h3 class="name">${name}</h3>
-										<div class="pic-window">
-											<img class="pic" src="${img}"></img>
-										</div>
-											<div class="description">
-												Type: <span class="type">${type}</span> <br>
-												${desc}
-											</div>
-											<p class="atkDef">Atk: ${atk} Def: ${def}</p>
-									</div>`;
-	mainContainer.insertAdjacentHTML("beforeend", card);
-
-	let direction;
-
-	const cardElement = document.getElementById(id);
-	cardElement.addEventListener("click", function () {
-		if (cardElement.parentElement.id === "allCards") {
+const addClick = (cardId) => {
+	const cardElement = document.getElementById(cardId);
+	cardElement.addEventListener("click", () => {
+		let direction;
+		if (cardElement.parentElement.id === "mainCards") {
 			direction = "toMain";
 		} else if (cardElement.parentElement.id === "favCards") {
 			direction = "toFavs";
 		}
-		moveCard(`${id}`, direction);
+		moveCard(cardId, direction);
 	});
 };
 
-async function getData(url) {
-	const response = await fetch(url);
+// Make Cards
+const makeCard = (id, name, img, type, desc, atk, def) => {
+	const card = `<div id="${id}" class="card ${type}">
+    <h3 class="name">${name}</h3>
+    <div class="pic-window">
+      <img class="pic" src="${img}"></img>
+    </div>
+    <div class="description">
+      Type: <span class="type">${type}</span> <br>
+      ${desc}
+    </div>
+    <p class="atkDef">Atk: ${atk} Def: ${def}</p>
+  </div>`;
+	mainContainer.insertAdjacentHTML("beforeend", card);
+	addClick(id);
+};
 
-	const findData = (card) => {
-		for (let info of card) {
-			allData.push(info);
-			typeData.push(info.type);
-		}
-	};
+// Count types
+const counters = document.getElementById("count");
+const typeData = [];
 
-	var data = await response.json();
-	findData(Object.values(data)[0]);
+const makeCounters = (type, number) => {
+	const counter = `<div class="counter">
+    <p class="typeName"><strong>${type}: ${number}</strong></p>
+  </div>`;
+	counters.insertAdjacentHTML("beforeend", counter);
+};
 
-	allData.map((cardInfo) => {
-		makeCard(
-			allData.indexOf(cardInfo),
-			cardInfo.name,
-			cardInfo.card_images[0].image_url_cropped,
-			cardInfo.type,
-			cardInfo.desc,
-			cardInfo.atk,
-			cardInfo.def
-		);
+const countTypes = (arr, val) => {
+	return arr.filter((el) => el === val).length;
+};
+
+const filterDuplicates = (arr) => {
+	return [...new Set(arr)];
+};
+
+// Retrieve data
+
+const retrieveData = fetch(cardApi);
+retrieveData
+	.then((response) => response.json())
+	.then((data) => data.data)
+	.then(async (allData) => {
+		const allMonsters = await Promise.all(allData);
+		findData(allMonsters);
+	})
+	.then(() => {
+		allCardInfo.forEach((cardInfo) => {
+			const description = `${cardInfo.desc}`;
+			const cutDesc = description.slice(0, 75) + `...`;
+			makeCard(
+				allCardInfo.indexOf(cardInfo),
+				cardInfo.name,
+				cardInfo.card_images[0].image_url_cropped,
+				cardInfo.type,
+				cutDesc,
+				cardInfo.atk,
+				cardInfo.def
+			);
+			typeData.push(cardInfo.type);
+		});
+		filterDuplicates(typeData).forEach((type) => {
+			let count = countTypes(typeData, type);
+			makeCounters(type, count);
+		});
 	});
 
-	monsterTypes.forEach((type) => {
-		makeCounters(type, countTypes(typeData, type));
-	});
-}
-
-getData(dataOfCards);
 // Sort Cards
-const allItems = document.getElementsByClassName("card");
-
 const sortMain = document.querySelectorAll(".sortBtn-main");
 const sortFavs = document.querySelectorAll(".sortBtn-favs");
 
 function sortData(direction, container) {
-	const newArr = Array.from(container.querySelectorAll(".card"));
+	const newArr = Array.from(container.getElementsByClassName("card"));
 	const orderOfElements = (a, b) => {
 		if (direction === "asc") {
 			return a.id - b.id;
@@ -131,14 +126,14 @@ function sortData(direction, container) {
 
 sortMain.forEach((item) => {
 	const direction = item.dataset.sortdir;
-	item.addEventListener("click", function () {
+	item.addEventListener("click", () => {
 		sortData(direction, mainContainer);
 	});
 });
 
 sortFavs.forEach((item) => {
 	const direction = item.dataset.sortdir;
-	item.addEventListener("click", function () {
+	item.addEventListener("click", () => {
 		sortData(direction, favContainer);
 	});
 });
